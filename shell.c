@@ -1,5 +1,5 @@
 /******************************************************************
- * @author David Whitters
+ * @authors Jonah Bukowsky, and David Whitters
  * @date 1/24/18
  *
  * CIS 452
@@ -10,7 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <sys/wait.h>
+#include <sys/resource.h>
 
 /** The maximum number of characters that will be analyzed. */
 #define MAX_NUM_INPUT_CHARS 100u
@@ -67,6 +69,15 @@ int main(int argc, char * argv[])
             /* Process command if the input isn't "quit". */
             if(strcmp(args[0], "quit") != 0u)
             {
+                /*
+                    Variables for resource usage statistics about
+                    each executed process.
+                */
+                struct rusage r;
+                long previous_sec = 0;
+                long previous_usec = 0;
+                long previous_switch = 0;
+
                 /* Holds ID of the parent process. */
                 pid_t pid;
                 int status;
@@ -80,13 +91,46 @@ int main(int argc, char * argv[])
                 else if(pid == 0)
                 {
                     /* Child process execution. */
-                    execvp(args[0], args);
-                    exit(EXIT_SUCCESS);
+                    if(execvp(args[0], args) < 0)
+                    {
+                        perror("EXEC FAILURE");
+                        exit(EXIT_FAILURE);
+                    }
+                    else
+                    {
+                        exit(EXIT_SUCCESS);
+                    }
                 }
                 else
                 {
                     /* Parent process execution. */
                     (void)wait(&status);
+
+                    if (getrusage(RUSAGE_CHILDREN, &r) < 0)
+                    {
+                        printf("Could not get stats on process!\n");
+                    }
+                    else
+                    {
+                        /*
+                            Output the user CPU time used for each
+                            child process spawned by the shell.
+                        */
+                        printf("\nUser cpu time:\t%ld seconds, %ld microseconds\n",
+                                r.ru_utime.tv_sec - previous_sec,
+                                r.ru_utime.tv_usec - previous_usec);
+
+                        /*
+                            Output the number of involuntary context
+                            switches experienced by each child process
+                            spawned by the shell.
+                        */
+                        printf("involuntary context switches:\t%ld\n\n",
+                                r.ru_nivcsw - previous_switch);
+                        previous_sec = r.ru_utime.tv_sec;
+                        previous_usec = r.ru_utime.tv_usec;
+                        previous_switch = r.ru_nivcsw;
+                    }
                 }
             }
             else
