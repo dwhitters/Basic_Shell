@@ -58,37 +58,41 @@ int main(int argc, char * argv[])
         /* Remove newline character. */
         input[strcspn(input, "\n")] = 0;
 
-        /* Split the string into its args. */
-        SplitInputString(input, args);
-
-        /* Process command if the input isn't "quit". */
-        if(strcmp(args[0], "quit") != 0u)
+        /* Make sure the user input a string. */
+        if(strlen(input) > 0u)
         {
-            /* Holds ID of the parent process. */
-            pid_t pid;
-            int status;
+            /* Split the string into its args. */
+            SplitInputString(input, args);
 
-            /* Exit on failure. */
-            if((pid = fork()) < 0)
+            /* Process command if the input isn't "quit". */
+            if(strcmp(args[0], "quit") != 0u)
             {
-                perror("FORK FAILURE");
-                exit(EXIT_FAILURE);
-            }
-            else if(pid == 0)
-            {
-                /* Child process execution. */
-                execvp(args[0], args);
-                exit(EXIT_SUCCESS);
+                /* Holds ID of the parent process. */
+                pid_t pid;
+                int status;
+
+                /* Exit on failure. */
+                if((pid = fork()) < 0)
+                {
+                    perror("FORK FAILURE");
+                    exit(EXIT_FAILURE);
+                }
+                else if(pid == 0)
+                {
+                    /* Child process execution. */
+                    execvp(args[0], args);
+                    exit(EXIT_SUCCESS);
+                }
+                else
+                {
+                    /* Parent process execution. */
+                    (void)wait(&status);
+                }
             }
             else
             {
-                /* Parent process execution. */
-                (void)wait(&status);
+                break;
             }
-        }
-        else
-        {
-            break;
         }
     }
 
