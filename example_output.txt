@@ -1,0 +1,66 @@
+Script started on 2018-01-24 23:18:09-0500
+]0;david@david-pc:~/Classes/452_CIS/Labs/Lab2/Basic_Shell[david@david-pc Basic_Shell]$ gcc -Waa;;[K[K[Kll -o sheel[K[Kll.o shell.c
+]0;david@david-pc:~/Classes/452_CIS/Labs/Lab2/Basic_Shell[david@david-pc Basic_Shell]$ ./a.out [K[K[K[K[K[K[K/shell.o 
+Enter Command: ls
+a.out  output.txt  README.md  shell.c  shell.o
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	1
+
+Enter Command: ls -a
+.  ..  a.out  .git  output.txt	README.md  shell.c  shell.o
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	2
+
+Enter Command: ls -a     -l      -t
+total 44
+-rwxr-xr-x 1 david david 13288 Jan 24 23:18 shell.o
+drwxr-xr-x 3 david david  4096 Jan 24 23:18 .
+-rw-r--r-- 1 david david     0 Jan 24 23:18 output.txt
+drwxr-xr-x 8 david david  4096 Jan 24 23:17 .git
+-rwxr-xr-x 1 david david   621 Jan 24 23:17 a.out
+-rw-r--r-- 1 david david  4558 Jan 24 23:13 shell.c
+drwxr-xr-x 3 david david  4096 Jan 24 22:17 ..
+-rw-r--r-- 1 david david    50 Jan 24 22:17 README.md
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	3
+
+Enter Command: 
+Enter Command: mkdir DIR
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	4
+
+Enter Command: rmdir DIR
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	5
+
+Enter Command: ls  mkdir some)_  _dir
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	6
+
+Enter Command: ls
+a.out  output.txt  README.md  shell.c  shell.o	some_dir
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	7
+
+Enter Command: rmdir som	e_dir
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	8
+
+Enter Command: ls
+a.out  output.txt  README.md  shell.c  shell.o
+
+User cpu time:	0 seconds, 0 microseconds
+involuntary context switches:	9
+
+Enter Command: quit
+]0;david@david-pc:~/Classes/452_CIS/Labs/Lab2/Basic_Shell[david@david-pc Basic_Shell]$ exit
+
+Script done on 2018-01-24 23:19:50-0500
